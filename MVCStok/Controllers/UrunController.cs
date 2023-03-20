@@ -14,18 +14,18 @@ namespace MVCStok.Controllers
         // GET: Urun
         public ActionResult Index()
         {
-            var urunler = db.TBLUrunler.ToList();
+            var urunler = db.TBLUrunler.Where(x => x.durum == true).ToList();
             return View(urunler);
         }
 
         [HttpGet]
         public ActionResult YeniUrun()
         {
-            List<SelectListItem> kategori = (from x in db.TBLKategori.ToList() 
-                                             select new SelectListItem 
-                                             { 
-                                                 Value = x.id.ToString(), 
-                                                 Text = x.ad 
+            List<SelectListItem> kategori = (from x in db.TBLKategori.ToList()
+                                             select new SelectListItem
+                                             {
+                                                 Value = x.id.ToString(),
+                                                 Text = x.ad
                                              }).ToList();
 
             ViewBag.drop = kategori;
@@ -41,10 +41,42 @@ namespace MVCStok.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
         public ActionResult UrunGetir(int id)
         {
+            List<SelectListItem> kategori = (from x in db.TBLKategori.ToList()
+                                             select new SelectListItem
+                                             {
+                                                 Text = x.ad,
+                                                 Value = x.id.ToString()
+                                             }).ToList();
             var urun = db.TBLUrunler.Find(id);
+            ViewBag.kategori = kategori;
             return View(urun);
+        }
+        [HttpPost]
+        public ActionResult UrunGuncelle(TBLUrunler p)
+        {
+            var urun = db.TBLUrunler.Find(p.id);
+            urun.marka = p.marka;
+            urun.satisfiyat = p.satisfiyat;
+            urun.stok = p.stok;
+            urun.alisfiyat = p.alisfiyat;
+            urun.ad = p.ad;
+
+            var kategori = db.TBLKategori.Where(x => x.id == p.TBLKategori.id).FirstOrDefault();
+            urun.TBLKategori = kategori;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult UrunSil(TBLUrunler p)
+        {
+            var urun = db.TBLUrunler.Find(p.id);
+            urun.durum = false;
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }

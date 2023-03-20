@@ -17,17 +17,21 @@
         <th>SİL</th>
         <th>GÜNCELLE</th>
     </tr>
+
     @foreach (var x in Model)
     {
-        <tr>@x.id</tr>
-        <tr>@x.ad</tr>
-        <tr>@x.marka</tr>
-        <tr>@x.stok</tr>
-        <tr>@x.alisfiyat</tr>
-        <tr>@x.satisfiyat</tr>
-        <tr>@x.TBLKategori.ad</tr>
-        <tr><a href="/Urun/UrunSil/@x.id" class="btn btn-danger">Sil</a></tr>
-        <tr><a href="/Urun/UrunGetir/@x.id" class="btn btn-success">Güncelle</a></tr>
+        <tr>
+            <td>@x.id</td>
+            <td>@x.ad</td>
+            <td>@x.marka</td>
+            <td>@x.stok</td>
+            <td>@x.alisfiyat</td>
+            <td>@x.satisfiyat</td>
+            <td>@x.TBLKategori.ad</td>
+            <td><a href="/Urun/UrunSil/@x.id" class="btn btn-danger">Sil</a></td>
+            <td><a href="/Urun/UrunGetir/@x.id" class="btn btn-success">Güncelle</a></td>
+        </tr>
     }
+
 </table>
 <a href="/Urun/YeniUrun" class="btn btn-primary">Yeni Ürün</a>

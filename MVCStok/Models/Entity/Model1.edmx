@@ -4,7 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DB_MVCStokModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DB_MVCStokModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TBLAdmin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kullanici" Type="varchar" MaxLength="20" />
+          <Property Name="sifre" Type="varchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="TBLKategori">
           <Key>
             <PropertyRef Name="id" />
@@ -21,6 +29,7 @@
           <Property Name="soyad" Type="varchar" MaxLength="30" />
           <Property Name="sehir" Type="varchar" MaxLength="15" />
           <Property Name="bakiye" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="durum" Type="bit" />
         </EntityType>
         <EntityType Name="TBLPersonel">
           <Key>
@@ -53,6 +62,7 @@
           <Property Name="alisfiyat" Type="decimal" Precision="18" Scale="2" />
           <Property Name="satisfiyat" Type="decimal" Precision="18" Scale="2" />
           <Property Name="kategori" Type="int" />
+          <Property Name="durum" Type="bit" />
         </EntityType>
         <Association Name="FK_TBLSatislar_TBLMusteri">
           <End Role="TBLMusteri" Type="Self.TBLMusteri" Multiplicity="0..1" />
@@ -103,6 +113,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DB_MVCStokModelStoreContainer">
+          <EntitySet Name="TBLAdmin" EntityType="Self.TBLAdmin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBLKategori" EntityType="Self.TBLKategori" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBLMusteri" EntityType="Self.TBLMusteri" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TBLPersonel" EntityType="Self.TBLPersonel" Schema="dbo" store:Type="Tables" />
@@ -125,8 +136,7 @@
             <End Role="TBLUrunler" EntitySet="TBLUrunler" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_MVCStokModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -148,6 +158,7 @@
           <Property Name="sehir" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="bakiye" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="TBLSatislar" Relationship="Self.FK_TBLSatislar_TBLMusteri" FromRole="TBLMusteri" ToRole="TBLSatislar" />
+          <Property Name="durum" Type="Boolean" />
         </EntityType>
         <EntityType Name="TBLPersonel">
           <Key>
@@ -186,6 +197,7 @@
           <Property Name="kategori" Type="Int32" />
           <NavigationProperty Name="TBLKategori" Relationship="Self.FK_TBLUrunler_TBLKategori" FromRole="TBLUrunler" ToRole="TBLKategori" />
           <NavigationProperty Name="TBLSatislar" Relationship="Self.FK_TBLSatislar_TBLUrunler" FromRole="TBLUrunler" ToRole="TBLSatislar" />
+          <Property Name="durum" Type="Boolean" />
         </EntityType>
         <Association Name="FK_TBLUrunler_TBLKategori">
           <End Role="TBLKategori" Type="Self.TBLKategori" Multiplicity="0..1" />
@@ -257,7 +269,16 @@
             <End Role="TBLUrunler" EntitySet="TBLUrunler" />
             <End Role="TBLSatislar" EntitySet="TBLSatislar" />
           </AssociationSet>
+          <EntitySet Name="TBLAdmin" EntityType="DB_MVCStokModel.TBLAdmin" />
         </EntityContainer>
+        <EntityType Name="TBLAdmin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kullanici" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="sifre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -275,6 +296,7 @@
           <EntitySetMapping Name="TBLMusteri">
             <EntityTypeMapping TypeName="DB_MVCStokModel.TBLMusteri">
               <MappingFragment StoreEntitySet="TBLMusteri">
+                <ScalarProperty Name="durum" ColumnName="durum" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="ad" ColumnName="ad" />
                 <ScalarProperty Name="soyad" ColumnName="soyad" />
@@ -308,6 +330,7 @@
           <EntitySetMapping Name="TBLUrunler">
             <EntityTypeMapping TypeName="DB_MVCStokModel.TBLUrunler">
               <MappingFragment StoreEntitySet="TBLUrunler">
+                <ScalarProperty Name="durum" ColumnName="durum" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="ad" ColumnName="ad" />
                 <ScalarProperty Name="marka" ColumnName="marka" />
@@ -315,6 +338,15 @@
                 <ScalarProperty Name="alisfiyat" ColumnName="alisfiyat" />
                 <ScalarProperty Name="satisfiyat" ColumnName="satisfiyat" />
                 <ScalarProperty Name="kategori" ColumnName="kategori" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBLAdmin">
+            <EntityTypeMapping TypeName="DB_MVCStokModel.TBLAdmin">
+              <MappingFragment StoreEntitySet="TBLAdmin">
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+                <ScalarProperty Name="kullanici" ColumnName="kullanici" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
